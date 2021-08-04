@@ -1,124 +1,128 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <meta charset="UTF-8">
-      <title>VueJS</title>
-      <link rel="stylesheet" href="css/estilo.css">
-      <script src="js/vue.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
-   </head>
-   <body>
-      <div id="app">
 
-         <h1>Form Vue js</h1>
-         
-         <div class="form">
-            
-            <form>
-                  <div class="grupo">
-                     <div class="nome input">
-                        <input type="text" id="" v-model="local.lat1" autocomplete="off" required/>
-                        <label for="nome">Lat Origin </label>
-                     </div>
-                     
-                     <div class="cidade input">
-                        <input type="text" id="" v-model="local.long1" autocomplete="off" required>
-                        <label for="cidade">Long Origin</label>
-                     </div>
-                     
-                     <br>
+<head>
+   <meta charset="UTF-8">
+   <title>VueJS</title>
+   <link rel="stylesheet" href="css/estilo.css">
+   <script src="js/vue.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+</head>
 
-                     <div class="nome input">
-                        <input type="text" id="" v-model="local.lat2" autocomplete="off" required/>
-                        <label for="nome">Lat Destino</label>
-                     </div>
-                     
-                     <div class="cidade input">
-                        <input type="text" id="" v-model="local.long2" autocomplete="off" required>
-                        <label for="cidade">Long Destino</label>
-                     </div>
-                     
-                      
-                  </div>
-                  <a class="button" v-on:click="add()">Buscar JSON</a>          
-            </form>
-            <p>
-               Digite o cep:
-               <input v-model="cep">
-            </p>
-         </div>
-         <p>{{ answer }}</p>
-         
-         <div class="tabela">
-            <table>
-                  <thead>
-                     <tr>
-                        <th>Distância em km</th>
-                     </tr>
-                  </thead>
-                  
-                  <tbody>
-                     <tr>
-                        <td>{{distance}} {{ distance ? 'km' : '' }}</td>
-                     </tr>
-                  </tbody>
-            </table>
-         </div>
+<body>
+   <div id="app">
+
+      <h1>Form Vue js</h1>
+
+      <div class="form">
+
+         <form>
+            <div class="grupo">
+               <div class="nome input">
+                  <input type="text" id="" v-model="local.lat1" autocomplete="off" required />
+                  <label for="nome">Lat Origin </label>
+               </div>
+
+               <div class="cidade input">
+                  <input type="text" id="" v-model="local.long1" autocomplete="off" required>
+                  <label for="cidade">Long Origin</label>
+               </div>
+
+               <br>
+               
+              
+
+               <div class="nome input">
+                  <input type="text" id="" v-model="local.lat2" autocomplete="off" required />
+                  <label for="nome">Lat Destino</label>
+               </div>
+
+               <div class="cidade input">
+                  <input type="text" id="" v-model="local.long2" autocomplete="off" required>
+                  <label for="cidade">Long Destino</label>
+               </div>
+
+
+            </div>
+            <a class="button" v-on:click="add()">Buscar JSON</a>
+         </form> <hr>
+         <p>
+            Digite o cep:
+            <input v-model="cep"> <p>{{ answer }}</p>
+         </p>
       </div>
+      
 
-      <script>
-         var app = new Vue({
-            el: '#app',
-            data: {
-               locais: [],
-               local: { 
-                  lat1 : -3.8588043,
-                  long1 : -38.6162021,
-                  lat2: -3.8487625,
-                  long2: -38.5976167
-               },
-               cep: '',
-               distance: '',
-               answer: 'Aguardando LAT/LONG!',
-               getDistanceFromLatLonInKm: ''
+      <div class="tabela">
+         <table>
+            <thead>
+               <tr>
+                  <th>Distância em km</th>
+               </tr>
+            </thead>
+
+            <tbody>
+               <tr>
+                  <td>{{distance}} {{ distance ? 'km' : '' }}</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+
+   <script>
+      var app = new Vue({
+         el: '#app',
+         data: {
+            locais: [],
+            local: {
+               lat1: -3.8588043,
+               long1: -38.6162021,
+               lat2: -3.8487625,
+               long2: -38.5976167
             },
-            watch: {
-               cep: function () {
-                  this.answer = 'Esperando você parar de escrever...'
-                  this.debouncedGetCEP()
+            cep: '',
+            distance: '',
+            answer: 'Aguardando LAT / LONG!',
+            getDistanceFromLatLonInKm: ''
+         },
+         watch: {
+            cep: function () {
+               this.answer = 'Esperando você parar de escrever...'
+               this.debouncedGetCEP()
+            }
+         },
+         created: function () {
+            this.debouncedGetCEP = _.debounce(this.getCEP, 500)
+         },
+         methods: {
+            add: function () {
+               var vm = this
+               console.log(this.local)
+
+               var R = 6371; // Radius of the earth in km
+               var dLat = (this.local.lat2 - this.local.lat1) * (Math.PI / 180);
+               var dLon = (this.local.long2 - this.local.long1) * (Math.PI / 180);
+               var a =
+                  Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos((this.local.lat1) * (Math.PI / 180)) * Math.cos((this.local.lat2) * (Math.PI / 180)) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2)
+                  ;
+               var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+               var d = R * c; // Distance in km
+
+               return vm.distance = d.toFixed(2);
+            },
+            getCEP: async function () {
+               if (!this.cep) {
+                  return
                }
-            },
-            created: function () {
-               this.debouncedGetCEP = _.debounce(this.getCEP, 500)
-            },
-            methods: {
-               add: function(){
-                  var vm = this
-                  console.log(this.local)
 
-                  var R = 6371; // Radius of the earth in km
-                  var dLat = (this.local.lat2-this.local.lat1) * (Math.PI/180);
-                  var dLon = (this.local.long2-this.local.long1) * (Math.PI/180); 
-                  var a = 
-                     Math.sin(dLat/2) * Math.sin(dLat/2) +
-                     Math.cos((this.local.lat1) * (Math.PI/180)) * Math.cos((this.local.lat2) * (Math.PI/180)) * 
-                     Math.sin(dLon/2) * Math.sin(dLon/2)
-                     ; 
-                  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-                  var d = R * c; // Distance in km
-                  
-                  return vm.distance = d.toFixed(2);
-               },
-               getCEP: async function () {
-                  if (!this.cep) {
-                     return 
-                  }
-                  
-                  this.answer = 'Obtendo dados...'
-                  var vm = this
-                  
-                  await axios.get(`https://brasilapi.com.br/api/cep/v2/${this.cep}`)
+               this.answer = 'Obtendo dados...'
+               var vm = this
+
+               await axios.get(`https://brasilapi.com.br/api/cep/v2/${this.cep}`)
                   .then(function (response) {
                      let lat = response.data.location.coordinates.latitude
                      let long = response.data.location.coordinates.longitude
@@ -126,13 +130,14 @@
                      console.log(lat, long)
                      vm.answer = [lat, long]
                   })
-                  .catch(function (error) {
-                     vm.answer = 'Erro! Não pode executar a API. ' + error
+                  .catch(function (errors) {
+                     vm.answer = 'Erro na requisição! ' + errors.message
                   })
-               }
-               
             }
-         });         
-      </script>
-   </body>
+
+         }
+      });
+   </script>
+</body>
+
 </html>
