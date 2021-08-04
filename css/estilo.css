@@ -1,0 +1,116 @@
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: #0D262D;
+  color: #fff;
+  height: 100%;
+}
+:root{
+  --color-p1: #ffffff; 
+  --color-p2: #48ff00;
+}
+
+.form {
+  max-width: 600px;
+  border: 1px solid var(--color-p2);
+  margin: 70px auto;
+}
+
+.form form{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 20px 10px;
+}
+
+.form .grupo{
+  margin: 20px 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.input{
+  position: relative;
+  width: 270px;
+  height: 30px;
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.email.input{
+  width: 90%;
+}
+
+.input label{
+  position: absolute;
+  left: 10px; 
+  font-size: 14px;
+  color: var(--color-p2);
+  transition: .5s;
+}
+
+label:not(.email) {
+  bottom: 30px;
+}
+
+input[type=email]{
+  width: 97%;
+  height: 30px;
+}
+
+input[type=text], input[type=email]{
+  outline: none;
+  border: none;
+  border-bottom: 1px solid var(--color-p2); 
+}
+
+input[type=text]:hover, input[type=email]:hover,
+input[type=text]:focus, input[type=email]:focus{
+  border-bottom: 1px solid var(--color-p1);
+}
+
+
+.button{
+  color: var(--color-p1);
+  border: 1px solid var(--color-p1);
+  padding: 10px 15px;
+  border-radius: 10px;
+}
+
+.button:hover{
+  color: white;
+  background-color: var(--color-p1);
+  cursor: pointer;
+}
+
+h1{
+  text-align:Center;
+  color: var(--color-p1);
+}
+
+.tabela{
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+table {
+  width: 100%;
+}
+
+table tr td{
+  font-size: 17px;
+  padding: 8px 10px;
+}
+
+table tr{
+  background-color: #000000;
+}
+
