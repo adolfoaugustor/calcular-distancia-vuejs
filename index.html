@@ -30,8 +30,8 @@
                </div>
 
                <br>
-               
-              
+
+
 
                <div class="nome input">
                   <input type="text" id="" v-model="local.lat2" autocomplete="off" required />
@@ -46,14 +46,15 @@
 
             </div>
             <a class="button" v-on:click="add()">Buscar JSON</a>
-         </form> <hr>
+         </form>
+         <hr>
          <p>
             Digite o cep:
-            <input v-model="cep"> <p>{{ answer }}</p>
+            <input v-model="cep">
+         <p>{{ answer }}</p>
          </p>
       </div>
-      
-
+      <!-- 6000-1370-900-1068 (3304 notebook) -->
       <div class="tabela">
          <table>
             <thead>
@@ -127,7 +128,6 @@
                      let lat = response.data.location.coordinates.latitude
                      let long = response.data.location.coordinates.longitude
 
-                     console.log(lat, long)
                      vm.answer = [lat, long]
                   })
                   .catch(function (errors) {
