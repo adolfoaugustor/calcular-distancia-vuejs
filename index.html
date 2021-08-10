@@ -50,8 +50,8 @@
          <hr>
          <p>
             Digite o cep:
-            <input v-model="cep">
-         <p>{{ answer }}</p>
+            <input v-model="cep"> {{ answer.msg }}
+         <p>{{ answer.lat ? answer.lat : '' }} | {{ answer.lat ? answer.lat : '' }}</p>
          </p>
       </div>
       <!-- 6000-1370-900-1068 (3304 notebook) -->
@@ -85,12 +85,16 @@
             },
             cep: '',
             distance: '',
-            answer: 'Aguardando LAT / LONG!',
+            answer: {
+               lat: '',
+               long: '',
+               msg: 'Aguardando LAT / LONG!'
+            },
             getDistanceFromLatLonInKm: ''
          },
          watch: {
             cep: function () {
-               this.answer = 'Esperando você parar de escrever...'
+               this.answer.msg = 'Esperando você parar de escrever...'
                this.debouncedGetCEP()
             }
          },
@@ -120,18 +124,19 @@
                   return
                }
 
-               this.answer = 'Obtendo dados...'
                var vm = this
+               vm.answer.msg = 'Obtendo dados...'
 
                await axios.get(`https://brasilapi.com.br/api/cep/v2/${this.cep}`)
                   .then(function (response) {
-                     let lat = response.data.location.coordinates.latitude
-                     let long = response.data.location.coordinates.longitude
+                     const { latitude, longitude } = response.data.location.coordinates
 
-                     vm.answer = [lat, long]
+                     vm.answer.msg = '';
+                     vm.answer.lat = latitude;
+                     vm.answer.long = longitude;
                   })
                   .catch(function (errors) {
-                     vm.answer = 'Erro na requisição! ' + errors.message
+                     vm.answer.msg = 'Erro na requisição! ' + errors.message
                   })
             }
 
