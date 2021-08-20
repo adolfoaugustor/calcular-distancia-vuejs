@@ -51,7 +51,7 @@
          <p>
             Digite o cep:
             <input v-model="cep"> {{ answer.msg }}
-         <p>{{ answer.lat ? answer.lat : '' }} | {{ answer.lat ? answer.lat : '' }}</p>
+         <p>{{ answer.lat ? answer.lat : '' }} | {{ answer.long ? answer.long : '' }}</p>
          </p>
       </div>
       <!-- 6000-1370-900-1068 (3304 notebook) -->
@@ -130,6 +130,7 @@
                await axios.get(`https://brasilapi.com.br/api/cep/v2/${this.cep}`)
                   .then(function (response) {
                      const { latitude, longitude } = response.data.location.coordinates
+                     console.log(response.data.location.coordinates);
 
                      vm.answer.msg = '';
                      vm.answer.lat = latitude;
